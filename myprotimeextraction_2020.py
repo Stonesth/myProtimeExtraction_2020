@@ -6,7 +6,6 @@ from selenium.webdriver.common.keys import Keys
 import xlsxwriter
 import datetime
 
-
 # -24 for the name of this project myProtimeExtraction_2020
 save_path = dirname(__file__)[ : -24]
 propertiesFolder_path = save_path + "Properties"
@@ -53,28 +52,48 @@ def recoverInformation() :
     try :
         in_1 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[2]/div/ul/li[1]/span[1]/a").text
     except selenium.common.exceptions.NoSuchElementException:
-        in_1 = '07:00'
+        in_1 = ''
     print ("in_1       : " + in_1)
     try :
         out_1 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[2]/div/ul/li[2]/span[1]/a").text
     except selenium.common.exceptions.NoSuchElementException:
-        out_1 = '12:00'
+        out_1 = ''
     print ("out_1      : " + out_1)
     try :
         in_2 =  tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[2]/div/ul/li[3]/span[1]/a").text
     except selenium.common.exceptions.NoSuchElementException:
-        in_2 = '12:30'
+        in_2 = ''
     print ("in_2       : " + in_2)
     try :
         out_2 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[2]/div/ul/li[4]/span[1]/a").text
     except selenium.common.exceptions.NoSuchElementException:
-        out_2 = '14:54'
+        out_2 = ''
     print ("out_2      : " + out_2)
     try :                                                
         total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[1]/ul/li[5]/span/span[2]").text
     except selenium.common.exceptions.NoSuchElementException:
         total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[1]/ul/li[4]/span/span[2]").text
     print ("total_hour : " + total_hour)
+
+    # -10:00 (6)
+    # -9:00 (5)
+    # 1:00 (4)
+    # 23:00 (5)
+    # IF total_hour contains "-" 
+    #   if length = 5 
+    #       => place 0 between the - and number
+    # else 
+    #   if length = 4
+    #       => place 0 before     
+    if (total_hour.find("-") != -1) :
+        if (len(total_hour) == 5) :
+            total_hour = total_hour[1:]
+            total_hour = "-0"+ total_hour
+    else :
+        if (len(total_hour) == 4) :
+            total_hour = "0"+ total_hour
+
+    print ("total_hour after manipulation : " + total_hour)
 
     informations = (
         in_1,
@@ -101,6 +120,7 @@ def writeInformationToExcel(date) :
 def createFileInto(expenses, date ) :
     global workbook
     month = {
+        '00': 'January',
         '01': 'January',
         '02': 'February',
         '03': 'March',
@@ -149,6 +169,21 @@ def createFileInto(expenses, date ) :
         '31': 'AF'
     }
 
+    number_of_day_month = {
+        'January': '31',
+        'February': '29',
+        'March': '31',
+        'April': '30',
+        'May': '31',
+        'June': '30',
+        'July': '31',
+        'August': '31',
+        'September': '30',
+        'October': '31',
+        'November': '30',
+        'December': '31'
+    }
+
     print ("date : " + date)
     month_from_date = date[5:-3]
     print ("month_from_date : " + month_from_date)
@@ -177,25 +212,57 @@ def createFileInto(expenses, date ) :
     worksheet.write(row - 1, col, date)
 
     # Create a format for the date or time.
-    date_format = workbook.add_format({'num_format': 'hh:mm', 'align': 'center'})
+    date_format = workbook.add_format({'num_format': '[hh]:mm', 'align': 'center'})
     for item in (expenses):
         worksheet.write(row, col, item, date_format)
         row += 1
 
     # Write a total using a formula.
-    date_format2 = workbook.add_format({'num_format': 'hh:mm', 'align': 'center'})
+    date_format2 = workbook.add_format({'num_format': '[hh]:mm', 'align': 'center'})
     date_format2.set_bg_color('gray')
     worksheet.write(row, col, '='+letter+'5-'+letter+'4',date_format2 )
     worksheet.write(row + 1, col, '='+letter+'7-'+letter+'6',date_format2 )
     worksheet.write(row + 2, col, '='+letter+'10+'+letter+'9',date_format2 )
-    worksheet.write(row + 3, col, '07:24',date_format2 )
+    
+    # =IF(AND(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(0;0;0);IF(OR(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(3;42;0);TIME(7;24;0)))
+    worksheet.write(row + 3, col, '=IF(AND(IF('+letter+'9="00:00"*1,TRUE,FALSE),IF('+letter+'10="00:00"*1,TRUE,FALSE)),TIME(0,0,0),IF(OR(IF('+letter+'9="00:00"*1,TRUE,FALSE),IF('+letter+'10="00:00"*1,TRUE,FALSE)),TIME(3,42,0),TIME(7,24,0)))',date_format2 )
+
     worksheet.write(row + 4, col, '='+letter+'6-'+letter+'5',date_format2 )
-    worksheet.write(row + 5, col, '=IF('+letter+'13<"00:30"*1,TIME(0,30,0)-('+letter+'6-'+letter+'5),TIME(0,0,0))', date_format2 )
+    # = IF(OR(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(0;0;0);IF(B13<"00:30"*1;TIME(0;30;0)-(B13);TIME(0;0;0)))
+    worksheet.write(row + 5, col, '=IF(OR(IF('+letter+'9="00:00"*1,TRUE,FALSE),IF('+letter+'10="00:00"*1,TRUE,FALSE)),TIME(0,0,0),IF('+letter+'13<"00:30"*1,TIME(0,30,0)-('+letter+'13),TIME(0,0,0)))', date_format2 )
     worksheet.write(row + 6, col, '='+letter+'11-'+letter+'12-'+letter+'14',date_format2 )
-    worksheet.write(row + 7, col, '='+letter_before+'16+'+letter+'15',date_format2 )
+    # worksheet.write(row + 7, col, '='+letter_before+'16+'+letter+'15',date_format2 )
+    # =IF(ISNUMBER(SEARCH("-";A16));("-" & TEXT(RIGHT(A16;LEN(A16)-FIND("-";A16))-B15;"hh:mm"));A16+B15)
+    #worksheet.write(row + 7, col, '=IF(ISNUMBER(SEARCH("-",'+letter_before+'16)),("-" & TEXT(RIGHT('+letter_before+'16,LEN('+letter_before+'16)-FIND("-",'+letter_before+'16))-'+letter+'15,"hh:mm")),'+letter_before+'16+'+letter+'15)', date_format2 )
+    #=IF(ISNUMBER(SEARCH("-";K16));IF(L15>=(TEXT(RIGHT(K16;LEN(K16)-FIND("-";K16));"hh:mm"));("-" & TEXT(RIGHT(K16;LEN(K16)-FIND("-";K16))-L15;"hh:mm"));L15-RIGHT(K16;LEN(K16)-FIND("-";K16)));K16+L15)
+    worksheet.write(row + 7, col, '=IF(ISNUMBER(SEARCH("-",'+letter_before+'16)),IF('+letter+'15>=(TEXT(RIGHT('+letter_before+'16,LEN('+letter_before+'16)-FIND("-",'+letter_before+'16)),"[hh]:mm")),("-" & TEXT(RIGHT('+letter_before+'16,LEN('+letter_before+'16)-FIND("-",'+letter_before+'16))-'+letter+'15,"[hh]:mm")),TEXT('+letter+'15-RIGHT('+letter_before+'16,LEN('+letter_before+'16)-FIND("-",'+letter_before+'16)),"[hh]:mm")),TEXT('+letter_before+'16+'+letter+'15,"[hh]:mm"))', date_format2 ) 
     
+    green_format = workbook.add_format({'num_format': '[hh]:mm', 'align': 'center'})
+    green_format.set_bg_color('green')
+    worksheet.conditional_format(letter+'16', {'type': 'cell', 'criteria': 'equal to', 'value': '$'+letter+'$8', 'format': green_format})
     
-    worksheet.write(row + 7, 0, '07:24',date_format2 )
+    red_format = workbook.add_format({'num_format': '[hh]:mm', 'align': 'center'})
+    red_format.set_bg_color('red')
+    worksheet.conditional_format(letter+'16', {'type': 'cell', 'criteria': 'not equal to', 'value': '$'+letter+'$8', 'format': red_format})
+
+    # This place it's to revoverd the amount of hours from last month
+    ## It's to have the opportunity to search into the list 00: Januray, 01: February, ...
+    month_from_date_before = int(month_from_date) - 1
+    if (month_from_date_before < 10) :
+        month_before = "0" + str(int(month_from_date) - 1)
+    else :
+        month_before = str(int(month_from_date) - 1)
+
+    
+    print("equal to month : " + month[month_before])
+    print("number_of_day_month : " + number_of_day_month[month[month_before]])
+    print("number_of_day_month : " + column[number_of_day_month[month[month_before]]])
+    # Exception when It's Januray we don't have the last entry of previous year.
+    # For the moment take the hours in the first entry JANUARY B8
+    if (month_from_date_before == 0) :
+        worksheet.write(row + 7, 0, '=January!B8',date_format2 )
+    else :
+        worksheet.write(row + 7, 0, '='+month[month_before]+'!'+column[number_of_day_month[month[month_before]]]+'16',date_format2 )
 
 
 # Jacobs, L.J. (Laurent)
@@ -215,8 +282,8 @@ today_year = datetime.datetime.today().strftime('%Y')
 today_month = datetime.datetime.today().strftime('%m')
 today_day = datetime.datetime.today().strftime('%d')
 d2 = datetime.date(int(today_year), int(today_month), int(today_day)-1)
-
 print (d2)
+d2 = datetime.date(2020, 3, 1)
 
 days = [d1 + datetime.timedelta(days=x) for x in range((d2-d1).days + 1)]
 
@@ -248,3 +315,9 @@ closeBrowser()
 
 
 # createFileInto(excel_path + '/', "test", 'xlsx', '')
+
+# =B16+C15   
+
+
+# =IF(B16<0, "-" & TEXT(ABS(B16),"hh:mm"), B16)
+# -0:04
