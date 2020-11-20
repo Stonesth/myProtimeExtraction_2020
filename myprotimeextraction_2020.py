@@ -222,7 +222,9 @@ def createFileInto(expenses, date ) :
     date_format2.set_bg_color('gray')
     worksheet.write(row, col, '='+letter+'5-'+letter+'4',date_format2 )
     worksheet.write(row + 1, col, '='+letter+'7-'+letter+'6',date_format2 )
-    worksheet.write(row + 2, col, '='+letter+'10+'+letter+'9',date_format2 )
+    #worksheet.write(row + 2, col, '='+letter+'10+'+letter+'9',date_format2 )
+    # =IF(AC10+AC9>"09:00"*1;TIME(9;0;0);AC10+AC9)
+    worksheet.write(row + 2, col, '=IF('+letter+'10+'+letter+'9>"09:00"*1,TIME(9,0,0),'+letter+'10+'+letter+'9)',date_format2 )
     
     # =IF(AND(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(0;0;0);IF(OR(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(3;42;0);TIME(7;24;0)))
     worksheet.write(row + 3, col, '=IF(AND(IF('+letter+'9="00:00"*1,TRUE,FALSE),IF('+letter+'10="00:00"*1,TRUE,FALSE)),TIME(0,0,0),IF(OR(IF('+letter+'9="00:00"*1,TRUE,FALSE),IF('+letter+'10="00:00"*1,TRUE,FALSE)),TIME(3,42,0),TIME(7,24,0)))',date_format2 )
@@ -283,7 +285,7 @@ today_month = datetime.datetime.today().strftime('%m')
 today_day = datetime.datetime.today().strftime('%d')
 d2 = datetime.date(int(today_year), int(today_month), int(today_day)-1)
 print (d2)
-d2 = datetime.date(2020, 3, 1)
+# d2 = datetime.date(2020, 2, 1)
 
 days = [d1 + datetime.timedelta(days=x) for x in range((d2-d1).days + 1)]
 
