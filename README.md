@@ -7,6 +7,8 @@ git clone https://github.com/Stonesth/myProtimeExtraction_2020.git
 Need to import the folowing project into this one 
 git clone https://github.com/Stonesth/Tools.git
 
+# Need to install the package XlsxWriter
+pip install XlsxWriter
 
 # Documentation 
 Excel

@@ -7,8 +7,10 @@ import xlsxwriter
 import datetime
 
 # -24 for the name of this project myProtimeExtraction_2020
-save_path = dirname(__file__)[ : -24]
-propertiesFolder_path = save_path + "Properties"
+# save_path = dirname(__file__)[ : -24]
+save_path = os.path.dirname(os.path.abspath("__file__"))[ : -24]
+print ("save_path = " + save_path)
+propertiesFolder_path = save_path + "/"+ "Properties"
 
 # Properties
 email_text = tools.readProperty(propertiesFolder_path, 'myProtimeExtraction_2020', 'Email=')
