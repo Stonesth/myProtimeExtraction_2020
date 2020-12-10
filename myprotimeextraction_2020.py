@@ -15,6 +15,7 @@ email_text = tools.readProperty(propertiesFolder_path, 'myProtimeExtraction_2020
 password_text = tools.readProperty(propertiesFolder_path, 'myProtimeExtraction_2020', 'Password=')
 excel_path = tools.readProperty(propertiesFolder_path, 'myProtimeExtraction_2020', 'excel_path=')
 name_of_file = tools.readProperty(propertiesFolder_path, 'myProtimeExtraction_2020', 'name_of_file=')
+year_to_check = tools.readProperty(propertiesFolder_path, 'myProtimeExtraction_2020', 'year_to_check=')
 
 # static variable
 workbook = ''
@@ -350,7 +351,7 @@ enterCredentials()
 goToMyCalendar()
 createExcelFile(excel_path + '/', name_of_file, 'xlsx')
 
-d1 = datetime.date(2020, 1, 1)
+d1 = datetime.date(int(year_to_check), 1, 1)
 today_year = datetime.datetime.today().strftime('%Y')
 today_month = datetime.datetime.today().strftime('%m')
 today_day = datetime.datetime.today().strftime('%d')
@@ -369,30 +370,3 @@ for day in days:
 
 closeExcelFile()
 closeBrowser()
-
-# goToMyCalendar_specific_date('2020-10-01')
-# writeInformationToExcel('2020-10-01')
-
-# goToMyCalendar_specific_date('2020-10-02')
-# writeInformationToExcel('2020-10-02')
-
-# goToMyCalendar_specific_date('2020-10-03')
-# writeInformationToExcel('2020-10-03')
-
-# goToMyCalendar_specific_date('2020-10-05')
-# writeInformationToExcel('2020-10-05')
-
-# goToMyCalendar_specific_date('2020-11-17')
-# writeInformationToExcel('2020-11-17')
-
-
-
-
-
-# createFileInto(excel_path + '/', "test", 'xlsx', '')
-
-# =B16+C15   
-
-
-# =IF(B16<0, "-" & TEXT(ABS(B16),"hh:mm"), B16)
-# -0:04
