@@ -273,7 +273,7 @@ def createFileInto(expenses, date ) :
     # Line 15
     # =IF(OR(IF(Z5="";TRUE;FALSE);IF(Z6="";TRUE;FALSE));TIME(0;0;0);Z6-Z5)
     # worksheet.write(row + 4, col, '='+letter+'6-'+letter+'5',date_format2 )
-    worksheet.write(row + 4, col, '=IF(OR(IF('+letter+'5="",TRUE,FALSE),IF('+letter+'6="",TRUE,FALSE)),TIME(0,0,0),'+letter+'6-'+letter+'5)',date_format2 )
+    worksheet.write(row + 4, col, '=IF(OR(IF('+letter+'5="",TRUE,FALSE),IF('+letter+'6="",TRUE,FALSE)),TIME(0,30,0),'+letter+'6-'+letter+'5)',date_format2 )
     
     # Line 16
     # = IF(OR(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(0;0;0);IF(B13<"00:30"*1;TIME(0;30;0)-(B13);TIME(0;0;0)))
@@ -290,7 +290,7 @@ def createFileInto(expenses, date ) :
 
     weekno = date_time_obj.weekday() 
     if weekno < 5 : 
-        worksheet.write(row + 6, col, '=IF(AND('+letter+'10="7:24",ISBLANK('+letter+'4),ISBLANK('+letter+'6),'+letter+'9<>"0:00"),'+letter+'13-'+letter+'14-'+letter+'16-TIME(7,24,0),IF('+letter+'10="3:42", - (TIME(7,24,0)-'+letter+'11),'+letter+'13-'+letter+'14-'+letter+'16))',date_format2 )
+        worksheet.write(row + 6, col, '=IF(AND('+letter+'10="7:24",ISBLANK('+letter+'4),ISBLANK('+letter+'6),'+letter+'9<>"0:00"),'+letter+'13-'+letter+'14-'+letter+'16-TIME(7,24,0),IF('+letter+'10="3:42", - (TIME(7,24,0)-'+letter+'11),'+letter+'13-'+letter+'14-((TIME(0,30,0)-('+letter+'16+'+letter+'15)))))',date_format2 )
     else: 
         worksheet.write(row + 6, col, '00:00',date_format2)
     
