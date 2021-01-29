@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding:utf-8 -*-
 from Tools import tools_v000 as tools
 import os
 from os.path import dirname
@@ -53,37 +55,62 @@ def goToMyCalendar_specific_date(date) :
     tools.driver.get('https://nn.myprotime.eu/#/calendar/person/113864/month/daydetail/113864/'+date+'?date=2020-01-01')
 
 def recoverInformation() :
-    tools.waitLoadingPageByID2(30, 'day-program')
+    tools.waitLoadingPageByXPATH2(30, '/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div')
+    tools.waitLoadingPageByXPATH2(30, '/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[1]/div[2]/div/div[2]/div[2]')
+
     try :
-        in_1 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[2]/div/ul/li[1]/span[1]/a").text
+        in_1 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/ul/li[1]/a/span[1]/span[2]").text
     except selenium.common.exceptions.NoSuchElementException:
-        in_1 = ''
+        # When hald day work
+        try : 
+            in_1 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/ul/li[1]/a/span[1]/span[2]").text
+        except selenium.common.exceptions.NoSuchElementException:
+            in_1 = ''
     if (debug) :
         print ("in_1       : " + in_1)
     try :
-        out_1 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[2]/div/ul/li[2]/span[1]/a").text
+        out_1 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/ul/li[2]/a/span[1]/span[2]").text
     except selenium.common.exceptions.NoSuchElementException:
-        out_1 = ''
+        try :
+            out_1 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/ul/li[2]/a/span[1]/span[2]").text
+        except selenium.common.exceptions.NoSuchElementException:
+            out_1 = ''
     if (debug) :
         print ("out_1      : " + out_1)
     try :
-        in_2 =  tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[2]/div/ul/li[3]/span[1]/a").text
+        in_2 =  tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/ul/li[3]/a/span[1]/span[2]").text
     except selenium.common.exceptions.NoSuchElementException:
-        in_2 = ''
+        try :
+            in_2 =  tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/ul/li[3]/a/span[1]/span[2]").text
+        except selenium.common.exceptions.NoSuchElementException:
+            in_2 = ''
     if (debug) :
         print ("in_2       : " + in_2)
     try :
-        out_2 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[2]/div/ul/li[4]/span[1]/a").text
+        out_2 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/ul/li[4]/a/span[1]/span[2]").text
     except selenium.common.exceptions.NoSuchElementException:
-        out_2 = ''
+        try :
+            out_2 = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/ul/li[4]/a/span[1]/span[2]").text
+        except selenium.common.exceptions.NoSuchElementException:
+            out_2 = ''
     if (debug) :
         print ("out_2      : " + out_2)
-    try :                                                
-        total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[1]/ul/li[5]/span/span[2]").text
-        time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[1]/ul/li[4]/span/span[2]").text
+    try :
+        total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/div[2]/ul[1]/li[3]/span[2]").text
+        time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/div[2]/ul[1]/li[2]/span[2]").text
     except selenium.common.exceptions.NoSuchElementException:
-        total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[1]/ul/li[4]/span/span[2]").text
-        time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/div[3]/div[1]/ul/li[3]/span/span[2]").text
+        # When half day
+        try :
+            total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[4]/div[2]/ul[1]/li[3]/span[2]").text
+            time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[4]/div[2]/ul[1]/li[2]/span[2]").text
+        except selenium.common.exceptions.NoSuchElementException:
+            try :
+                total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/div[2]/ul[1]/li[3]/span[2]").text
+                time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/div[2]/ul[1]/li[2]/span[2]").text
+            except selenium.common.exceptions.NoSuchElementException:
+                #  Exception when it's a day of weekend 
+                total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/div[2]/ul[1]/li[3]/span[2]").text
+                time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/div[2]/ul[1]/li[2]/span[2]").text
     if (debug) :
         print ("total_hour : " + total_hour)
 
@@ -111,10 +138,15 @@ def recoverInformation() :
 
     # absences
     try :
-        absences = tools.driver.find_element_by_id("absences").text
-        if (debug) :
-            print ("absences      : " + absences)
-        absences = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div/section/div/ul/li/div/div[1]/span[1]").text
+        absences = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/ul/li/a/span[2]/span[1]/span[2]").text
+        if (absences == 'Jour entier') :
+            absences = '7:24'
+        elif (absences == '3:42') :
+            absences = '3:42'
+        elif (absences == u'Après-midi') :
+            absences = '-3:42'
+        else :
+            absences = 'ERROR'
 
     except selenium.common.exceptions.NoSuchElementException:
         absences = 'Normal'
@@ -262,44 +294,30 @@ def createFileInto(expenses, date ) :
     worksheet.write(row + 1, col, '='+letter+'7-'+letter+'6',date_format2 )
     
     # Line 13
-    #worksheet.write(row + 2, col, '='+letter+'10+'+letter+'9',date_format2 )
-    # =IF(AC10+AC9>"09:00"*1;TIME(9;0;0);AC10+AC9)
-    worksheet.write(row + 2, col, '=IF('+letter+'12+'+letter+'11>"09:00"*1,TIME(9,0,0),'+letter+'12+'+letter+'11)',date_format2 )
+    worksheet.write(row + 2, col, '=IF('+letter+'12+'+letter+'11>"09:00"*1,TIME(9,0,0)+'+letter+'16,'+letter+'12+'+letter+'11)',date_format2 )
     
     # Line 14
-    # =IF(AND(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(0;0;0);IF(OR(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(3;42;0);TIME(7;24;0)))
     worksheet.write(row + 3, col, '=IF(AND(IF('+letter+'11="00:00"*1,TRUE,FALSE),IF('+letter+'12="00:00"*1,TRUE,FALSE)),TIME(0,0,0),IF(OR(IF('+letter+'11="00:00"*1,TRUE,FALSE),IF('+letter+'12="00:00"*1,TRUE,FALSE)),TIME(3,42,0),TIME(7,24,0)))',date_format2 )
 
     # Line 15
-    # =IF(OR(IF(Z5="";TRUE;FALSE);IF(Z6="";TRUE;FALSE));TIME(0;0;0);Z6-Z5)
-    # worksheet.write(row + 4, col, '='+letter+'6-'+letter+'5',date_format2 )
-    worksheet.write(row + 4, col, '=IF(OR(IF('+letter+'5="",TRUE,FALSE),IF('+letter+'6="",TRUE,FALSE)),TIME(0,30,0),'+letter+'6-'+letter+'5)',date_format2 )
+    worksheet.write(row + 4, col, '=IF(OR(IF('+letter+'5="",TRUE,FALSE),IF('+letter+'6="",TRUE,FALSE)),TIME(0,0,0),'+letter+'6-'+letter+'5)',date_format2 )
     
     # Line 16
-    # = IF(OR(IF(B9="00:00"*1;TRUE;FALSE);IF(B10="00:00"*1;TRUE;FALSE));TIME(0;0;0);IF(B13<"00:30"*1;TIME(0;30;0)-(B13);TIME(0;0;0)))
     worksheet.write(row + 5, col, '=IF(OR(IF('+letter+'11="00:00"*1,TRUE,FALSE),IF('+letter+'12="00:00"*1,TRUE,FALSE)),TIME(0,0,0),IF('+letter+'15<"00:30"*1,TIME(0,30,0)-('+letter+'15),TIME(0,0,0)))', date_format2 )
     
     # Line 17
-    # =IF(AF9="-7:24";AF12-AF13-AF15-TIME(7;24;0);AF12-AF13-AF15)
-    # =IF(E9="-7:24";E12-E13-E15-TIME(7;24;0);IF(E9="-3:42";E12-E13-E15-TIME(3;42;0);E12-E13-E15))
-    # If the date is equal in a day in the weekend => place the value 00:00
-    
     if (debug) :
         print (date)
     date_time_obj = datetime.datetime.strptime(date, '%Y-%m-%d')
 
     weekno = date_time_obj.weekday() 
     if weekno < 5 : 
-        worksheet.write(row + 6, col, '=IF(AND('+letter+'10="7:24",ISBLANK('+letter+'4),ISBLANK('+letter+'6),'+letter+'9<>"0:00"),'+letter+'13-'+letter+'14-'+letter+'16-TIME(7,24,0),IF('+letter+'10="3:42", - (TIME(7,24,0)-'+letter+'11),'+letter+'13-'+letter+'14-((TIME(0,30,0)-('+letter+'16+'+letter+'15)))))',date_format2 )
+        worksheet.write(row + 6, col, '=IF(AND('+letter+'10="7:24",ISBLANK('+letter+'4),ISBLANK('+letter+'6),'+letter+'9<>"0:00"),'+letter+'13-'+letter+'14-'+letter+'16-TIME(7,24,0),IF('+letter+'10="3:42", - (TIME(3,42,0)-'+letter+'11), IF('+letter+'10="-3:42", - (TIME(7,24,0)-'+letter+'11),'+letter+'13-'+letter+'14-'+letter+'16'+')))',date_format2 )
     else: 
         worksheet.write(row + 6, col, '00:00',date_format2)
     
     
     # Line 18
-    # worksheet.write(row + 7, col, '='+letter_before+'16+'+letter+'15',date_format2 )
-    # =IF(ISNUMBER(SEARCH("-";A16));("-" & TEXT(RIGHT(A16;LEN(A16)-FIND("-";A16))-B15;"hh:mm"));A16+B15)
-    #worksheet.write(row + 7, col, '=IF(ISNUMBER(SEARCH("-",'+letter_before+'16)),("-" & TEXT(RIGHT('+letter_before+'16,LEN('+letter_before+'16)-FIND("-",'+letter_before+'16))-'+letter+'15,"hh:mm")),'+letter_before+'16+'+letter+'15)', date_format2 )
-    #=IF(ISNUMBER(SEARCH("-";K16));IF(L15>=(TEXT(RIGHT(K16;LEN(K16)-FIND("-";K16));"hh:mm"));("-" & TEXT(RIGHT(K16;LEN(K16)-FIND("-";K16))-L15;"hh:mm"));L15-RIGHT(K16;LEN(K16)-FIND("-";K16)));K16+L15)
     worksheet.write(row + 7, col, '=IF(ISNUMBER(SEARCH("-",'+letter_before+'18)),IF('+letter+'17>=(TEXT(RIGHT('+letter_before+'18,LEN('+letter_before+'18)-FIND("-",'+letter_before+'18)),"[hh]:mm")),("-" & TEXT(RIGHT('+letter_before+'18,LEN('+letter_before+'18)-FIND("-",'+letter_before+'18))-'+letter+'17,"[hh]:mm")),TEXT('+letter+'17-RIGHT('+letter_before+'18,LEN('+letter_before+'18)-FIND("-",'+letter_before+'18)),"[hh]:mm")),TEXT('+letter_before+'18+'+letter+'17,"[hh]:mm"))', date_format2 ) 
     
     # Line 18
@@ -354,13 +372,17 @@ goToMyCalendar()
 createExcelFile(excel_path + '/', name_of_file, 'xlsx')
 
 d1 = datetime.date(int(year_to_check), 1, 1)
+# d1 = datetime.date(2020, 6, 1)
 today_year = datetime.datetime.today().strftime('%Y')
 today_month = datetime.datetime.today().strftime('%m')
 today_day = datetime.datetime.today().strftime('%d')
-d2 = datetime.date(int(today_year), int(today_month), int(today_day)-1)
+if (year_to_check != today_year) :
+    d2 = datetime.date(int(year_to_check), 12, 31)
+else :
+    d2 = datetime.date(int(today_year), int(today_month), int(today_day)-1)
 if (debug) :
     print (d2)
-# d2 = datetime.date(2020, 2, 1)
+# d2 = datetime.date(2020, 1, 5)
 
 days = [d1 + datetime.timedelta(days=x) for x in range((d2-d1).days + 1)]
 
