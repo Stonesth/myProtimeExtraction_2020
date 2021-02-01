@@ -398,3 +398,6 @@ for day in days:
 
 closeExcelFile()
 closeBrowser()
+
+# Close the program
+tools.driver.quit()
