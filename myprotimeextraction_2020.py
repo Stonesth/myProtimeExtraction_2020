@@ -109,8 +109,12 @@ def recoverInformation() :
                 time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[3]/div[2]/ul[1]/li[2]/span[2]").text
             except selenium.common.exceptions.NoSuchElementException:
                 #  Exception when it's a day of weekend 
-                total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/div[2]/ul[1]/li[3]/span[2]").text
-                time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/div[2]/ul[1]/li[2]/span[2]").text
+                try :
+                    total_hour = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/div[2]/ul[1]/li[3]/span[2]").text
+                    time_prested = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/div[2]/ul[1]/li[2]/span[2]").text
+                except selenium.common.exceptions.NoSuchElementException:
+                    total_hour = '00:00'
+                    time_prested = '00:00'
     if (debug) :
         print ("total_hour : " + total_hour)
 
@@ -379,7 +383,7 @@ today_day = datetime.datetime.today().strftime('%d')
 if (year_to_check != today_year) :
     d2 = datetime.date(int(year_to_check), 12, 31)
 else :
-    d2 = datetime.date(int(today_year), int(today_month), int(today_day)-1)
+    d2 = datetime.date(int(today_year), int(today_month), int(today_day))
 if (debug) :
     print (d2)
 # d2 = datetime.date(2020, 1, 5)
