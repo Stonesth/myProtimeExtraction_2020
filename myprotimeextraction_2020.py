@@ -24,7 +24,7 @@ year_to_check = tools.readProperty(propertiesFolder_path, 'myProtimeExtraction_2
 # static variable
 workbook = ''
 worksheet = ''
-debug = False
+debug = False # Default value is False
 
 # Open Browser
 def openBrowser() :
@@ -143,7 +143,9 @@ def recoverInformation() :
     # absences
     try :
         absences = tools.driver.find_element_by_xpath("/html/body/div[2]/div/div[1]/div/div[1]/div/div[2]/div/div[2]/div/div[2]/ul/li/a/span[2]/span[1]/span[2]").text
-        if (absences == 'Jour entier') :
+        if (debug) :
+            print ("absences before : " + absences)
+        if (absences == 'Jour entier (7:24)') :
             absences = '7:24'
         elif (absences == '3:42') :
             absences = '3:42'
@@ -236,7 +238,7 @@ def createFileInto(expenses, date ) :
 
     number_of_day_month = {
         'January': '31',
-        'February': '29',
+        'February': '28',
         'March': '31',
         'April': '30',
         'May': '31',
