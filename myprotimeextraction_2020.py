@@ -388,7 +388,7 @@ else :
     d2 = datetime.date(int(today_year), int(today_month), int(today_day))
 if (debug) :
     print (d2)
-# d2 = datetime.date(2020, 1, 5)
+# d2 = datetime.date(2021, 1, 28)
 
 days = [d1 + datetime.timedelta(days=x) for x in range((d2-d1).days + 1)]
 
