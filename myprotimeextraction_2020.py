@@ -388,13 +388,13 @@ today_year = datetime.datetime.today().strftime('%Y')
 today_month = datetime.datetime.today().strftime('%m')
 today_day = datetime.datetime.today().strftime('%d')
 if (year_to_check != today_year) :
-    if (begin_month_date != "") :
-        d2 = datetime.date(int(year_to_check), int(begin_month_date), 31)
+    if (end_month_date != "") :
+        d2 = datetime.date(int(year_to_check), int(end_month_date), 31)
     else:
         d2 = datetime.date(int(year_to_check), 12, 31)
 else :
-    if (begin_month_date != "") :
-        d2 = datetime.date(int(today_year), int(begin_month_date), int(today_day))
+    if (end_month_date != "") :
+        d2 = datetime.date(int(today_year), int(end_month_date), int(today_day))
     else:
         d2 = datetime.date(int(today_year), int(today_month), int(today_day))
 if (debug) :
